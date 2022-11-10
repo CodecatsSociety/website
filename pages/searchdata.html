@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search Your Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <style>
+      .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.5rem 0.1rem !important;
+      }
+
+      .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background-color: : transparent !important;
+      }
+    </style>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggler">
+          <a class="navbar-brand" href="#"><img src="../assets/images/author-01.png" style="width:50px;height:50px;border:1px solid #fff;border-radius: 50%" alt=""></a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">HOME</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./taskrigs.html">TaskRigs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./weekly.html">Weekly Contests</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./biweekly.html">Bi-Weekly Contests</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./consitency_score(monthly).html">Consistency Score (Monthly)</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./catcoders.html">CatCoders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="./searchdata.html">Search Data</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    
+    <div class="container mt-3">
+
+      <div class="row g-3 align-items-center">
+  <div class="col-auto">
+    <label for="inputPassword6" class="col-form-label"><b>HackerRank Username : </b></label>
+  </div>
+  <div class="col-auto">
+    <input type="text" id="inputPassword6" class="form-control" aria-describedby="passwordHelpInline">
+  </div>
+  <div class="col-auto">
+    <span id="passwordHelpInline" class="form-text">
+      <input type="submit" id="fetchmydata" class="btn btn-success" onclick="fetchMyData()" value="Fetch My Data">
+    </span>
+  </div>
+</div>
+  <hr>
+<div class="row">
+  
+  <div class="col col-auto">
+    <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title" id="name"></h5>
+    <h6 class="card-subtitle mb-2 text-muted" id="roll"></h6>
+    <h6 class="card-subtitle mb-2 text-muted" id="nitkkrmail"></h6>
+    <h6 class="card-subtitle mb-2 text-muted" id="personalmail"></h6>
+  </div>
+</div>
+  </div>
+  </div>
+
+
+  
+
+
+
+<div class="alert alert-danger alert-dismissible fade show" id="msg" style="display:none" role="alert">
+  <strong>Sorry!</strong> No Data Avaliable.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+  <div id="chart"></div>
+  <hr>
+      <div id="table">
+          
+      </div>
+      
+    </div>
+    <footer class="mt-3">
+      <div class="d-flex justify-content-center">
+            <p class="text-weight-bold" href="javascript:void(0)">Copyright &copy; 2022 Brand</p>
+            &nbsp;<a class="link-secondary" href="#">Terms</a>
+            &nbsp;<a class="link-secondary" href="#">Privacy Policy</a>
+      </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://kit.fontawesome.com/95aea39966.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>  
+      $('#msg').hide();
+      function fetchMyData(){
+        let id = $('#inputPassword6').val();
+        // console.log(id);
+        f(id);
+      }
+
+      function updatedetails(details){
+        $('#name').html("Name : " + details[0]);
+        $('#roll').html("Roll Number : " + details[1]);
+        $('#nitkkrmail').html("ORG Mail : " + details[2]);
+        $('#personalmail').html("Personal Mail : " + details[3]);
+      }
+
+      function makechart(pdata){
+        if(pdata.length < 2) return;
+        $('#chart').html(`<div id="chartContainer" style="height: 370px; width: 100%;"></div>`);
+        var chart = new CanvasJS.Chart("chartContainer", {
+          animationEnabled: true,
+          theme: "light2",
+          title:{
+            text: ""
+          },
+          axisY:{
+            minimum: 0,
+            maximum: 100
+          }
+        }); 
+        var series1 = { //dataSeries - first quarter
+          type: "spline",
+          indexLabelFontSize: 16
+        };
+        series1.dataPoints = pdata;
+        chart.options.data = [];
+        chart.options.data.push(series1);
+        chart.render();
+      }
+
+      function update(data){
+        attended = data.data.data;
+        // console.log(data);
+        details = data.data.details;
+        allcounts = data.data.total; // taskrig,weekly,biweekly,total
+
+        // $().html(allcounts[0]);
+        // $().html(allcounts[1]);
+        // $().html(allcounts[2]);
+
+        if(data == undefined){
+          return;
+        }
+        if(attended.length == 0){
+          $('#msg').show();
+          return;
+        }
+        let progressData = [];
+        updatedetails(details);
+        let tableheader = `<table id="example" class="table table-responsive table-striped" style="width:100%">
+        <thead><tr><th>Assignment/Contest</th><th>Rank</th><th>Questions Done</th><th>Total Questions</th><th>Link</th>`;
+        let tablefooter = `<tfoot><tr><th>Assignment/Contest</th><th>Rank</th><th>Questions Done</th><th>Total Questions</th><th>Link</th>`;
+        tableheader += `</tr></thead>`;
+        tablefooter += `</tr></tfoot></table>`;
+
+        let tablebody = `<tbody>`
+        console.log("Attended : ",attended);
+        for(const val of attended){
+            tablebody += `<tr>`;
+            let i = 0;
+            if(val[0].includes("Contest")){
+                progressData.push({label:val[0],y:(val[2]/val[3])*100}); // percentile
+            }
+            
+            for(dt of val){
+                if(i == 4){
+                	// total users in that event
+                  i=i+1;
+                  continue;
+                }
+                console.log(dt);
+                dt = dt.toString();
+                if(dt.includes("hackerrank.com")){
+                    tablebody += `<td><a href="${dt}">Link</a></td>`;
+                }else{
+                    tablebody += `<td>${dt}</td>`;
+                }
+                i = i+1;
+            }
+            
+            tablebody += `</tr>`;
+        }
+        tablebody += `</tbody>`;
+        
+        let fulldata = tableheader + tablebody + tablefooter;
+        $('#table').html(fulldata);
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+        console.log(progressData);
+        // make chart
+        makechart(progressData);
+      }
+      
+      async function f(id){
+        data = await fetch(`https://script.google.com/macros/s/AKfycbyHn-ROSGJmG24h6oQgS00fwRqVWoA1OpthjkBF8O-YGTDVT37ewgBIWzEBF8TaKsrS/exec?hackerrankid=${id}`);
+        data = await data.json();
+        update(data);
+      }
+
+
+    </script>
+  </body>
+</html>
