@@ -58,7 +58,7 @@
 </div>
     
     <div class="container mt-3">
-      <div id="table" class="table-responsive">
+      <div id="table">
           
       </div>
       
@@ -90,6 +90,22 @@
               return (a["Score"] < b["Score"]) ? 1 : -1;
           }
       }
+
+      jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+            "formatted-num-pre": function ( a ) {
+                a = (a === "-" || a === "") ? 0 : a.replace( /[^\d\-\.]/g, "" );
+                return parseFloat( a );
+            },
+         
+            "formatted-num-asc": function ( a, b ) {
+                return a - b;
+            },
+         
+            "formatted-num-desc": function ( a, b ) {
+                return b - a;
+            }
+        } );
+
 
       $('#msg').hide();
       function update(data){
@@ -137,6 +153,11 @@
                     [0,'desc'],
                     [1,'asc'],
                     [2,'asc']
+                ],
+                columnDefs: [
+                  {type: 'formatted-num',targets:0},
+                  { type: 'formatted-num', targets: 1 },
+                  {type:'formatted-num',targets:2}
                 ]
             });
         });
@@ -146,7 +167,7 @@
       async function f(){
         // data = await fetch('https://script.google.com/macros/s/AKfycbxd6HZ9sgLIFTlr_HtZt3JQ85jHzvh123zoKn2lsQEDCGgjkMMu_9wbb5labMfiurY7/exec');
         // data = await fetch('https://script.google.com/macros/s/AKfycbx1eCAaitkQai0vjNT_3-ypM-bBZWwJEZnkBI8mfkeKrbVvFRD4AxbooBlC6F1hFKnq/exec');
-        data = await fetch(`https://script.google.com/macros/s/AKfycbxIyLgpMOpftboz_Vyu5TkgSZP0jUOT5n9MwcpfPy8VIDqMXj2QzRY5tzF8gncIgw6M/exec`);
+        data = await fetch(`https://script.google.com/macros/s/AKfycbxdhvsffr8fBXVGvVQJ0_rMk_yGfL7b2AkjGkUMYZbUOKUlEAZ0TTS9r62FMmpBCriw/exec`);
         data = await data.json();
         console.log(data);
         update(data);
