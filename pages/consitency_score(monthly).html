@@ -58,6 +58,23 @@
 </div>
     
     <div class="container mt-3">
+      <select name="" class="form-control" id="months">
+        <option value="0">January</option>
+        <option value="1">Febraury</option>
+        <option value="2">March</option>
+        <option value="3">April</option>
+        <option value="4">May</option>
+        <option value="5">June</option>
+        <option value="6">July</option>
+        <option value="7">August</option>
+        <option value="8">September</option>
+        <option value="9">Octuber</option>
+        <option value="10">November</option>
+        <option value="11">December</option>
+      </select>
+      <br>
+      <input type="submit" onclick="monthchange()" class="btn btn-success" value="Get Data">
+      <br><br>
       <div id="table">
           
       </div>
@@ -167,12 +184,23 @@
       async function f(){
         // data = await fetch('https://script.google.com/macros/s/AKfycbxd6HZ9sgLIFTlr_HtZt3JQ85jHzvh123zoKn2lsQEDCGgjkMMu_9wbb5labMfiurY7/exec');
         // data = await fetch('https://script.google.com/macros/s/AKfycbx1eCAaitkQai0vjNT_3-ypM-bBZWwJEZnkBI8mfkeKrbVvFRD4AxbooBlC6F1hFKnq/exec');
-        data = await fetch(`https://script.google.com/macros/s/AKfycbxdhvsffr8fBXVGvVQJ0_rMk_yGfL7b2AkjGkUMYZbUOKUlEAZ0TTS9r62FMmpBCriw/exec`);
+        dt = new Date();
+        mth = dt.getMonth();
+        // mth = 10;
+        data = await fetch(`https://script.google.com/macros/s/AKfycbxHD6FWytn0qORCHvRy42eo-7RP6KiqAydL3ngia6MeHOPEkH5W0QziBhxf27GwHGXk/exec?month=${mth}`);
         data = await data.json();
         console.log(data);
         update(data);
       }
       f();
+
+      async function monthchange(){
+        mth = $("#months").val();
+        data = await fetch(`https://script.google.com/macros/s/AKfycbxHD6FWytn0qORCHvRy42eo-7RP6KiqAydL3ngia6MeHOPEkH5W0QziBhxf27GwHGXk/exec?month=${mth}`);
+        data = await data.json();
+        console.log(data);
+        update(data);
+      }
 
 
     </script>
